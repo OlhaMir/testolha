@@ -1,0 +1,29 @@
+import math
+
+# Дано наближені значення
+approx_sqrt_38 = 6.16
+approx_5_div_3 = 1.667
+
+# Точні значення
+exact_sqrt_38 = math.sqrt(38)
+exact_5_div_3 = 5 / 3
+
+# Обчислення абсолютних похибок
+abs_error_sqrt_38 = abs(exact_sqrt_38 - approx_sqrt_38)
+abs_error_5_div_3 = abs(exact_5_div_3 - approx_5_div_3)
+
+# Обчислення відносних похибок
+rel_error_sqrt_38 = abs_error_sqrt_38 / exact_sqrt_38
+rel_error_5_div_3 = abs_error_5_div_3 / exact_5_div_3
+
+# Виведення результатів
+print(f"Абсолютна похибка для √38 ≈ 6.16: {abs_error_sqrt_38}")
+print(f"Відносна похибка для √38 ≈ 6.16: {rel_error_sqrt_38}")
+print(f"Абсолютна похибка для 5/3 ≈ 1.667: {abs_error_5_div_3}")
+print(f"Відносна похибка для 5/3 ≈ 1.667: {rel_error_5_div_3}")
+
+# Визначення точнішого рівняння
+if rel_error_sqrt_38 < rel_error_5_div_3:
+    print("Рівняння √38 ≈ 6.16 точніше.")
+else:
+    print("Рівняння 5/3 ≈ 1.667 точніше.")
