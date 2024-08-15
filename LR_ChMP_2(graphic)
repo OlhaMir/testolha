@@ -1,0 +1,30 @@
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Визначення функції
+def f(x):
+    return 2*x**4 - 2*x**3 - 4*x**2 + 6*x + 5
+
+# Генерація значень x
+x = np.linspace(-2, 2, 400)
+
+# Генерація значень y
+y = f(x)
+
+# Побудова графіка
+plt.figure(figsize=(8, 6))
+plt.plot(x, y, label='2*x**4 - 2*x**3 - 4*x**2 + 6*x + 5', color='blue')
+plt.title('Графік функції 2*x**4 - 2*x**3 - 4*x**2 + 6*x + 5')
+plt.xlabel('x')
+plt.ylabel('f(x)')
+
+# Додавання осей з стрілками
+plt.axhline(0, color='black', linewidth=0.5)
+plt.axvline(0, color='black', linewidth=0.5)
+
+plt.text(2.05, -4, 'x', ha='center', va='center')
+plt.text(-0.3, 25, 'y', ha='center', va='center')
+
+plt.grid(True)
+plt.legend()
+plt.show()
