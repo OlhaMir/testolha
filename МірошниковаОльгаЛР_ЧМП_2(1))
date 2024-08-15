@@ -1,0 +1,25 @@
+import numpy as np
+
+def f(x):
+    return 2*x**4 - 2*x**3 - 4*x**2 + 6*x + 5
+
+def find_segments():  # Відокремлюємо корені
+    search_range = np.arange(-10, 11, 1)  # Змінено діапазон пошуку від -10 до 10 з кроком 1
+
+    a = None
+    previous_x = None
+    current_x  = None
+    segments = []
+
+    for x in search_range:
+        x = round(x, 4)
+        current_x = f(x)
+        if previous_x is not None and previous_x * current_x < 0:
+            segments.append((a, x))
+        a = x
+        previous_x = current_x
+    return segments
+
+segments = find_segments()
+for a, b in segments:
+    print(f'Found segment:  [{a}, {b}]')
