@@ -1,0 +1,46 @@
+def f(x):
+    return 2 * x**4 - 2 * x**3 - 4 * x**2 + 6 * x + 5
+def bisection_method(f, a, b, tol):
+    if f(a) * f(b) >= 0:
+        raise ValueError("f(a) і f(b) повинні мати протилежні знаки")
+    
+    while (b - a) / 2.0 > tol:
+        midpoint = (a + b) / 2.0
+        if f(midpoint) == 0:
+            return midpoint
+        elif f(a) * f(midpoint) < 0:
+            b = midpoint
+        else:
+            a = midpoint
+    
+    return (a + b) / 2.0
+def secant_method(f, a, b, tol):
+    if f(a) * f(b) >= 0:
+        raise ValueError("f(a) і f(b) повинні мати протилежні знаки")
+    
+    while abs(b - a) > tol:
+        fa = f(a)
+        fb = f(b)
+        c = b - fb * (b - a) / (fb - fa)
+        
+        if abs(f(c)) < tol:
+            return c
+        
+        a = b
+        b = c
+    
+    return b
+# Відрізок [-2, -1]
+a1, b1 = -2, -1
+root_bisection_1 = bisection_method(f, a1, b1, 0.0001)
+root_secant_1 = secant_method(f, a1, b1, 0.0001)
+
+# Відрізок [-1, 0]
+a2, b2 = -1, 0
+root_bisection_2 = bisection_method(f, a2, b2, 0.0001)
+root_secant_2 = secant_method(f, a2, b2, 0.0001)
+
+print(f"Корінь методом половинного ділення на відрізку [-2, -1]: {root_bisection_1}")
+print(f"Корінь методом хорд на відрізку [-2, -1]: {root_secant_1}")
+print(f"Корінь методом половинного ділення на відрізку [-1, 0]: {root_bisection_2}")
+print(f"Корінь методом хорд на відрізку [-1, 0]: {root_secant_2}")
