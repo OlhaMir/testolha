@@ -1,0 +1,54 @@
+import sympy as sp
+
+x = sp.symbols('x')
+f = 2*x**4 - 2*x**3 - 4*x**2 + 6*x + 5
+f_prime = sp.diff(f, x)
+
+# Функція методу Ньютона
+def newton_method(f, f_prime, x0, tol=0.0001, max_iter=100):
+    for i in range(max_iter):
+        fx0 = f.subs(x, x0)
+        fpx0 = f_prime.subs(x, x0)
+        x1 = x0 - fx0/fpx0
+        if abs(x1 - x0) < tol:
+            return x1.evalf(), i
+        x0 = x1
+    return None, max_iter
+
+root1, iterations1 = newton_method(f, f_prime, x0=-1.5)
+print(f"Корінь на відрізку [-2, -1]: {root1} за {iterations1} ітерацій")
+
+root2, iterations2 = newton_method(f, f_prime, x0=-0.5)
+print(f"Корінь на відрізку [-1, 0]: {root2} за {iterations2} ітерацій")
+def combined_method(f, f_prime, a, b, tol=0.0001, max_iter=100):
+    if f.subs(x, a) * f.subs(x, b) > 0:
+        raise ValueError("f(a) і f(b) повинні мати різні знаки.")
+
+    for i in range(max_iter):
+        c = a - (f.subs(x, a) * (b - a)) / (f.subs(x, b) - f.subs(x, a))
+        fc = f.subs(x, c)
+
+        if abs(fc) < tol:
+            return c.evalf(), i
+
+        if f.subs(x, a) * fc < 0:
+            b = c
+        else:
+            a = c
+
+        # Обчислення нового наближення методом Ньютона
+        fa_prime = f_prime.subs(x, a)
+        a_new = a - f.subs(x, a) / fa_prime
+
+        if abs(a_new - a) < tol:
+            return a_new.evalf(), i
+
+        a = a_new
+
+    return None, max_iter
+
+root1_combined, iterations1_combined = combined_method(f, f_prime, a=-2, b=-1)
+print(f"Корінь на відрізку [-2, -1] комбінованим методом: {root1_combined} за {iterations1_combined} ітерацій")
+
+root2_combined, iterations2_combined = combined_method(f, f_prime, a=-1, b=0)
+print(f"Корінь на відрізку [-1, 0] комбінованим методом: {root2_combined} за {iterations2_combined} ітерацій")
