@@ -1,0 +1,61 @@
+import numpy as np
+
+# Матриця коефіцієнтів
+A = np.array([[1, 1, -1],
+              [3, -1, 2],
+              [4, 4, -3]])
+
+# Вектор вільних членів
+B = np.array([-2, 9, -5])
+
+# Обчислення детермінанта матриці A
+det_A = np.linalg.det(A)
+
+# Матриці для Крамера
+A1 = A.copy()
+A2 = A.copy()
+A3 = A.copy()
+
+# Замінюємо відповідні стовпці на вектор B
+A1[:, 0] = B
+A2[:, 1] = B
+A3[:, 2] = B
+
+# Обчислення детермінантів для кожної заміни
+det_A1 = np.linalg.det(A1)
+det_A2 = np.linalg.det(A2)
+det_A3 = np.linalg.det(A3)
+
+# Розв'язок системи
+x = det_A1 / det_A
+y = det_A2 / det_A
+z = det_A3 / det_A
+
+print(f"Метод Крамера: x = {x}, y = {y}, z = {z}")
+# Обчислення оберненої матриці
+A_inv = np.linalg.inv(A)
+
+# Розв'язок системи
+solution = np.dot(A_inv, B)
+
+print(f"Матричний метод: x = {solution[0]}, y = {solution[1]}, z = {solution[2]}")
+from scipy.linalg import lu
+
+# Функція для вирішення системи лінійних рівнянь методом Гауса
+def gaussian_elimination(A, B):
+    P, L, U = lu(A)
+    # Після LU розкладення
+    # Лінійна система у вигляді LUx = PB
+    # Спочатку розв'язуємо Ly = PB
+    y = np.linalg.solve(L, np.dot(P, B))
+    # Тепер розв'язуємо Ux = y
+    x = np.linalg.solve(U, y)
+    return x
+
+solution_gauss = gaussian_elimination(A, B)
+
+print(f"Метод Гауса: x = {solution_gauss[0]}, y = {solution_gauss[1]}, z = {solution_gauss[2]}")
+# Перевірка за допомогою numpy.linalg.solve
+solution_np = np.linalg.solve(A, B)
+
+print(f"Перевірка numpy.linalg.solve: x = {solution_np[0]}, y = {solution_np[1]}, z = {solution_np[2]}")
