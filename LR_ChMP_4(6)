@@ -1,0 +1,14 @@
+import numpy as np
+
+# Задана матриця
+matrix = np.array([
+    [2, 5, 7],
+    [6, 3, 4],
+    [5, -2, -3]
+])
+
+# Знаходження оберненої матриці
+inverse_matrix = np.linalg.inv(matrix)
+
+print("Обернена матриця:")
+print(inverse_matrix)
