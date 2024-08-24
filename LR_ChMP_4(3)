@@ -1,0 +1,13 @@
+import numpy as np
+
+# Визначення вектору-стовпця
+column_vector = np.array([[3], [1], [-1], [5], [2]])
+
+# Визначення вектору-рядка
+row_vector = np.array([[4, 0, -2, 3, 1]])
+
+# Обчислення матричного добутку
+result = np.dot(column_vector, row_vector)
+
+# Виведення результату
+print(result)
