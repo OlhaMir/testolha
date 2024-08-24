@@ -1,0 +1,20 @@
+import numpy as np
+
+# Задані матриці A та B
+A = np.array([[1, 2], [4, -1]])
+B = np.array([[2, -3], [-4, 1]])
+
+# Обчислення добутків AB та BA
+AB = np.dot(A, B)
+BA = np.dot(B, A)
+
+# Обчислення матриці C = AB - BA
+C = AB - BA
+
+# Виведення результату
+print("Матриця AB:")
+print(AB)
+print("\nМатриця BA:")
+print(BA)
+print("\nМатриця C = AB - BA:")
+print(C)
