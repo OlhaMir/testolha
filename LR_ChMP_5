@@ -1,0 +1,78 @@
+import numpy as np
+import matplotlib.pyplot as plt
+
+#Графік
+
+# Дайте визначення функцій
+def f1(x, y):
+    return np.cos(y + 0.5) + x - 0.8
+
+def f2(x, y):
+    return np.sin(x) - 2*y - 1.6
+
+# Створіть сітку значень x і y
+x_values = np.linspace(-2, 2, 400)
+y_values = np.linspace(-2, 2, 400)
+X, Y = np.meshgrid(x_values, y_values)
+
+# Оцініть функції на сітці
+Z1 = f1(X, Y)
+Z2 = f2(X, Y)
+
+# Побудуйте контури, де функції дорівнюють нулю
+plt.figure(figsize=(10, 8))
+plt.contour(X, Y, Z1, levels=[0], colors='b')
+plt.contour(X, Y, Z2, levels=[0], colors='r')
+
+# Ярлики та назва
+plt.xlabel('x')
+plt.ylabel('y')
+plt.title('Графічне розділення коренів')
+plt.grid(True)
+plt.show()
+
+#Проста ітерація
+
+# Визначте ітераційні функції
+def iterate_x(y):
+    return 0.8 - np.cos(y + 0.5)
+
+def iterate_y(x):
+    return 0.5 * (np.sin(x) - 1.6)
+
+# Початкові припущення (з графічного аналізу)
+x_guess = 0.5
+y_guess = 0.5
+
+# Точність і максимальна кількість ітерацій
+precision = 0.001
+max_iterations = 100
+
+# Ітеративний процес
+for _ in range(max_iterations):
+    x_new = iterate_x(y_guess)
+    y_new = iterate_y(x_new)
+    
+    # Перевірка збіжності
+    if abs(x_new - x_guess) < precision and abs(y_new - y_guess) < precision:
+        break
+    
+    x_guess, y_guess = x_new, y_new
+
+# Виведення розв’язку
+print(f'Рішення: x ≈ {x_new:.3f}, y ≈ {y_new:.3f}')
+
+#Перевірка
+
+# Оцінка вихідних функцій при знайденому розв’язку
+check_f1 = f1(x_new, y_new)
+check_f2 = f2(x_new, y_new)
+
+print(f'Перевірка f1(x, y) = 0: {check_f1:.6f}')
+print(f'Перевірка f2(x, y) = 0: {check_f2:.6f}')
+
+# Значення check_f1 і check_f2 мають бути близькими до 0, якщо рішення правильне
+if np.isclose(check_f1, 0, atol=precision) and np.isclose(check_f2, 0, atol=precision):
+    print("Розв'язок задовольняє систему рівнянь.")
+else:
+    print("Розв'язок не задовольняє систему рівнянь.")
