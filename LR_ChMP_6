@@ -1,0 +1,49 @@
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Дані точки даних
+x_points = np.array([-3, -1, 0, 2])
+y_points = np.array([5, 3, -7, -15])
+
+# Функція для обчислення полінома Лагранжа
+def lagrange_interpolation(x_points, y_points, x):
+    L = 0
+    n = len(x_points)
+    for i in range(n):
+        term = y_points[i]
+        for j in range(n):
+            if i != j:
+                term *= (x - x_points[j]) / (x_points[i] - x_points[j])
+        L += term
+    return L
+
+# Точки, де нам потрібно обчислити поліном
+x_eval = np.array([-2.5, -2, -0.5, 1])
+
+# Розрахунок значень у необхідних точках
+y_eval = np.array([lagrange_interpolation(x_points, y_points, xi) for xi in x_eval])
+
+# Виведення значень з точністю до 0,001
+y_eval_rounded = np.round(y_eval, 3)
+print("Розраховані значення:")
+for xi, yi in zip(x_eval, y_eval_rounded):
+    print(f"f({xi}) ≈ {yi}")
+
+# Перевірка та відображення похибки
+errors = np.abs(y_eval - y_eval_rounded)
+for i, err in enumerate(errors):
+    print(f"Похибка обчислення для f({x_eval[i]}) ≈ {y_eval_rounded[i]}: {err:.6f}")
+
+# Побудова графіка функції інтерполяції
+x_plot = np.linspace(min(x_points) - 1, max(x_points) + 1, 500)
+y_plot = [lagrange_interpolation(x_points, y_points, xi) for xi in x_plot]
+
+plt.plot(x_plot, y_plot, label='Інтерполяція Лагранжа')
+plt.scatter(x_points, y_points, color='red', label='Дані точки')
+plt.scatter(x_eval, y_eval_rounded, color='blue', label='Інтерпольовані точки')
+plt.xlabel('x')
+plt.ylabel('f(x)')
+plt.title('Інтерполяційний поліном Лагранжа')
+plt.legend()
+plt.grid(True)
+plt.show()
