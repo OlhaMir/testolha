@@ -1,0 +1,52 @@
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Дані таблиці
+x = np.array([0.115, 0.120, 0.125, 0.130, 0.135, 0.140, 0.145, 0.150, 0.155, 0.160, 0.165])
+y = np.array([8.6572, 8.2932, 7.9582, 7.6489, 7.3623, 7.0961, 6.8491, 6.6185, 6.3998, 6.1965, 6.0055])
+
+# Функція для обчислення коефіцієнтів інтерполяційного полінома Ньютона
+def divided_diff(x, y):
+    n = len(y)
+    coef = np.zeros([n, n])
+    coef[:,0] = y
+
+    for j in range(1, n):
+        for i in range(n - j):
+            coef[i][j] = (coef[i+1][j-1] - coef[i][j-1]) / (x[i+j] - x[i])
+    
+    return coef[0, :]  # Повертаємо перший рядок з коефіцієнтами
+
+# Функція для побудови полінома Ньютона
+def newton_polynomial(coef, x_data, x):
+    n = len(x_data) - 1
+    p = coef[n]
+    for k in range(1, n + 1):
+        p = coef[n - k] + (x - x_data[n - k]) * p
+    return p
+
+# Обчислюємо коефіцієнти полінома Ньютона
+coef = divided_diff(x, y)
+
+# Точки, в яких потрібно знайти значення функції
+x_points = [0.129, 0.157]
+y_points = [newton_polynomial(coef, x, xp) for xp in x_points]
+
+# Виводимо наближені значення в точках 0.129 і 0.157
+for xi, yi in zip(x_points, y_points):
+    print(f"Приблизне значення y у точці x = {xi}: {yi}")
+
+# Точки для побудови графіка
+x_vals = np.linspace(0.110, 0.170, 100)
+y_vals = [newton_polynomial(coef, x, xi) for xi in x_vals]
+
+# Побудова графіка
+plt.plot(x, y, 'ro', label='Табличні дані')
+plt.plot(x_vals, y_vals, 'b-', label='Інтерполяція Ньютона')
+plt.plot(x_points, y_points, 'go', label='Обчислені точки 0.129 і 0.157')
+plt.xlabel('x')
+plt.ylabel('y')
+plt.legend()
+plt.title('Інтерполяція поліномом Ньютона')
+plt.grid(True)
+plt.show()
