@@ -1,0 +1,34 @@
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.interpolate import CubicSpline
+
+# Дані з таблиці
+x = np.array([0.4, 0.7, 1.1, 1.7, 2.4])
+y = np.array([2.39, 2.86, 1.55, 3.57, 2.94])
+
+# Побудова кубічного сплайну
+cs = CubicSpline(x, y)
+
+# Перевірка інтерполяції для конкретних точок
+x_check = np.array([0.5, 1.0, 2.0])  # Точки для перевірки
+y_check = cs(x_check)
+
+# Виведемо результати
+print("Перевірка значень для нових точок:")
+for xi, yi in zip(x_check, y_check):
+    print(f"x = {xi:.2f}, інтерпольоване y = {yi:.2f}")
+
+# Генеруємо нові точки для побудови графіка
+x_new = np.linspace(min(x), max(x), 100)
+y_new = cs(x_new)
+
+# Побудова графіків
+plt.plot(x, y, 'o', label='Табличні точки')
+plt.plot(x_new, y_new, label='Кубічний сплайн')
+plt.plot(x_check, y_check, 'x', label='Точки перевірки', color='red')
+plt.xlabel('x')
+plt.ylabel('y')
+plt.legend()
+plt.grid(True)
+plt.title('Кубічний сплайн з перевіркою')
+plt.show()
