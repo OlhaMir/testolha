@@ -1,0 +1,46 @@
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.optimize import least_squares
+
+# Функція f(x) = x * sin(x)
+def func(x):
+    return x * np.sin(x)
+
+# Вхідні дані
+x = np.array([i * 0.1 for i in range(1, 11)])  # Масив x: [0.1, 0.2, ..., 1.0]
+y = np.array([func(xi) for xi in x])  # Масив y: f(x)
+
+print('x =', x)
+print('y =', y)
+
+# Функція для мінімізації (a[0] + a[1] * x + a[2] * x**2 - y)
+def fun(a, x, y):
+    return a[0] + a[1] * x + a[2] * x**2 - y
+
+# Початкові наближення коефіцієнтів полінома
+a0 = np.array([1, 1, 1])
+
+# Використовуємо least_squares для знаходження оптимальних параметрів
+res_lsq = least_squares(fun, x0=a0, args=(x, y))
+
+# Виведення коефіцієнтів поліному
+print(f"a0 = {res_lsq.x[0]:.2f}, a1 = {res_lsq.x[1]:.2f}, a2 = {res_lsq.x[2]:.2f}")
+
+# Функція апроксимації з отриманими коефіцієнтами
+def f_approx(x):
+    return res_lsq.x[0] + res_lsq.x[1] * x + res_lsq.x[2] * x**2
+
+# Побудова графіка
+x_p = np.linspace(min(x), max(x), 100)  # Точки для графіка апроксимованої функції
+y_p = f_approx(x_p)  # Значення апроксимованої функції
+
+# Графік
+plt.plot(x, y, 'o', label='Дані')  # Точки даних
+plt.plot(x_p, y_p, 'b', label='МНК апроксимація параболою')  # Лінія апроксимації
+
+plt.xlabel('x')
+plt.ylabel('y')
+plt.title("МНК наближення параболою")
+plt.legend()
+plt.grid(True)
+plt.show()
