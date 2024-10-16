@@ -1,0 +1,55 @@
+import numpy as np
+from scipy.integrate import solve_ivp
+import matplotlib.pyplot as plt
+
+# Перше рівняння
+def equation_1(x, y):
+    return x + np.sin(y / np.sqrt(2.8))
+
+# Друге рівняння
+def equation_2(x, y):
+    return x + np.cos(y / np.sqrt(10))
+
+# Початкові умови для обох рівнянь
+y0_a = [2.2]  # Для першого рівняння
+y0_b = [0.8]  # Для другого рівняння
+
+# Діапазон x для обох рівнянь
+x_values_a = np.linspace(1.4, 2.4, 11)  # Для першого рівняння [1.4, 2.4] з кроком 0.1
+x_values_b = np.linspace(0.6, 1.6, 11)  # Для другого рівняння [0.6, 1.6] з кроком 0.1
+
+# Розв'язання для першого рівняння
+sol_a = solve_ivp(equation_1, [1.4, 2.4], y0_a, t_eval=x_values_a)
+
+# Розв'язання для другого рівняння
+sol_b = solve_ivp(equation_2, [0.6, 1.6], y0_b, t_eval=x_values_b)
+
+# Виведення результатів для першого рівняння
+print('Перше рівняння (x та y):')
+print('x =', sol_a.t)
+print('y =', sol_a.y[0])
+
+# Виведення результатів для другого рівняння
+print('\nДруге рівняння (x та y):')
+print('x =', sol_b.t)
+print('y =', sol_b.y[0])
+
+# Побудова графіка для першого рівняння
+plt.figure(figsize=(10, 5))
+plt.plot(sol_a.t, sol_a.y[0], marker='o', label='Перше рівняння')
+plt.xlabel('x')
+plt.ylabel('y(x)')
+plt.title('Розв’язання першого диф. рівняння')
+plt.grid()
+plt.legend()
+plt.show()
+
+# Побудова графіка для другого рівняння
+plt.figure(figsize=(10, 5))
+plt.plot(sol_b.t, sol_b.y[0], marker='o', label='Друге рівняння')
+plt.xlabel('x')
+plt.ylabel('y(x)')
+plt.title('Розв’язання другого диф. рівняння')
+plt.grid()
+plt.legend()
+plt.show()
