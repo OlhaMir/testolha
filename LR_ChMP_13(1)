@@ -1,0 +1,72 @@
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Перше рівняння (Метод Ейлера)
+def f_a(x, y):
+    return x + np.sin(y / np.sqrt(2.8))
+
+# Друге рівняння (Метод Ейлера-Коші)
+def f_b(x, y):
+    return x + np.cos(y / np.sqrt(10))
+
+# Метод Ейлера
+def euler_method(f, x0, y0, x_end, h):
+    x_values = np.arange(x0, x_end + h, h)
+    y_values = np.zeros(len(x_values))
+    y_values[0] = y0
+    for i in range(1, len(x_values)):
+        y_values[i] = y_values[i-1] + h * f(x_values[i-1], y_values[i-1])
+    return x_values, y_values
+
+# Метод Ейлера-Коші (покращений метод Ейлера)
+def euler_cauchy_method(f, x0, y0, x_end, h):
+    x_values = np.arange(x0, x_end + h, h)
+    y_values = np.zeros(len(x_values))
+    y_values[0] = y0
+    for i in range(1, len(x_values)):
+        y_pred = y_values[i-1] + h * f(x_values[i-1], y_values[i-1])
+        y_values[i] = y_values[i-1] + (h / 2) * (f(x_values[i-1], y_values[i-1]) + f(x_values[i], y_pred))
+    return x_values, y_values
+
+# Вхідні дані для першого рівняння
+x0_a, y0_a, x_end_a = 1.4, 2.2, 2.4
+h = 0.1
+
+# Розв'язок першого рівняння методом Ейлера
+x_euler_a, y_euler_a = euler_method(f_a, x0_a, y0_a, x_end_a, h)
+
+# Виведення числових відповідей для першого рівняння
+print("Числові значення для першого рівняння (Метод Ейлера):")
+for x, y in zip(x_euler_a, y_euler_a):
+    print(f"x = {x:.2f}, y = {y:.4f}")
+
+# Вхідні дані для другого рівняння
+x0_b, y0_b, x_end_b = 0.6, 0.8, 1.6
+
+# Розв'язок другого рівняння методом Ейлера-Коші
+x_ec_b, y_ec_b = euler_cauchy_method(f_b, x0_b, y0_b, x_end_b, h)
+
+# Виведення числових відповідей для другого рівняння
+print("\nЧислові значення для другого рівняння (Метод Ейлера-Коші):")
+for x, y in zip(x_ec_b, y_ec_b):
+    print(f"x = {x:.2f}, y = {y:.4f}")
+
+# Графік для першого рівняння (Метод Ейлера)
+plt.figure(figsize=(10, 5))
+plt.plot(x_euler_a, y_euler_a, marker='o', label="Метод Ейлера (рівняння 1)")
+plt.xlabel('x')
+plt.ylabel('y')
+plt.title('Розв’язок першого рівняння методом Ейлера')
+plt.grid(True)
+plt.legend()
+plt.show()
+
+# Графік для другого рівняння (Метод Ейлера-Коші)
+plt.figure(figsize=(10, 5))
+plt.plot(x_ec_b, y_ec_b, marker='o', label="Метод Ейлера-Коші (Рівняння 2)")
+plt.xlabel('x')
+plt.ylabel('y')
+plt.title('Розв’язок другого рівняння методом Ейлера-Коші')
+plt.grid(True)
+plt.legend()
+plt.show()
