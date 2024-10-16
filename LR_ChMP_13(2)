@@ -1,0 +1,55 @@
+from scipy.integrate import odeint
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Перше рівняння
+def ode_function_a(y, x):
+    return x + np.sin(y / np.sqrt(2.8))
+
+# Друге рівняння
+def ode_function_b(y, x):
+    return x + np.cos(y / np.sqrt(10))
+
+# Вхідні дані для першого рівняння (інтервал [1.4, 2.4])
+x_values_odeint_a = np.arange(1.4, 2.4 + 0.1, 0.1)
+y0_a = 2.2
+
+# Вхідні дані для другого рівняння (інтервал [0.6, 1.6])
+x_values_odeint_b = np.arange(0.6, 1.6 + 0.1, 0.1)
+y0_b = 0.8
+
+# Розв'язок для першого рівняння за допомогою odeint
+y_odeint_a = odeint(ode_function_a, y0_a, x_values_odeint_a)
+
+# Розв'язок для другого рівняння за допомогою odeint
+y_odeint_b = odeint(ode_function_b, y0_b, x_values_odeint_b)
+
+# Виведення значень для першого рівняння
+print("Розв'язок першого рівняння (Метод odeint):")
+for x, y in zip(x_values_odeint_a, y_odeint_a):
+    print(f"x = {x:.1f}, y = {y[0]:.4f}")
+
+# Виведення значень для другого рівняння
+print("\nРозв'язок другого рівняння (Метод odeint):")
+for x, y in zip(x_values_odeint_b, y_odeint_b):
+    print(f"x = {x:.1f}, y = {y[0]:.4f}")
+
+# Графік для першого рівняння
+plt.figure(figsize=(10, 5))
+plt.plot(x_values_odeint_a, y_odeint_a, marker='o', label="odeint Розв’язання (рівняння 1)")
+plt.xlabel('x')
+plt.ylabel('y')
+plt.title('Розв’язання першого рівняння за допомогою odeint')
+plt.grid(True)
+plt.legend()
+plt.show()
+
+# Графік для другого рівняння
+plt.figure(figsize=(10, 5))
+plt.plot(x_values_odeint_b, y_odeint_b, marker='o', label="odeint Розв’язання (рівняння 2)")
+plt.xlabel('x')
+plt.ylabel('y')
+plt.title('Розв’язання другого рівняння за допомогою odeint')
+plt.grid(True)
+plt.legend()
+plt.show()
