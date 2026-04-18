@@ -1,0 +1,91 @@
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+
+
+from google.colab import files
+
+uploaded = files.upload()
+
+
+df = pd.read_csv('youtube.csv', encoding='latin1')
+df
+
+
+df.head()
+
+
+df.shape
+
+
+df.duplicated().sum()
+
+
+df.duplicated(subset=['Title']).sum()
+
+
+df = df.drop_duplicates (subset='Title')
+
+
+df.shape
+
+
+df.columns = ['rank', 'youtuber', 'subscribers', 'video_views', 'category', 'title', 'uploads', 'country', 'abbreviation', 'channel_type', 'video_views_rank', 'country_rank', 'channel_type_rank', 'video_views_for_the_last_30_days', 'lowest_monthly_earnings', 'highest_monthly_earnings', 'lowest_yearly_earnings', 'highest_yearly_earnings', 'subscribers_for_last_30_days', 'created_year', 'created_month', 'created_date', 'gross_tertiary_education_enrollment_(%)', 'population', 'unemployment_rate', 'urban_population', 'latitude', 'longitude']
+df.head()
+
+
+df.info()
+
+
+df.isna().sum()
+
+
+numeric_cols = df.select_dtypes(include=['number']).columns
+
+for col in numeric_cols:
+    if df[col].isna().sum() > 0:
+        df[col] = df[col].astype(float)
+        df[col] = df[col].fillna(df[col].mean())
+
+text_cols = df.select_dtypes(include=['object']).columns
+
+for col in text_cols:
+    if df[col].isna().sum() > 0:
+        df[col] = df[col].fillna('Unknown')
+
+
+df['country'].unique()
+
+
+df['country'].nunique()
+
+
+df['video_views'].plot(kind='hist', label='кількість переглядів')
+plt.xlabel('video_views')
+plt.title('Розподіл переглядів')
+plt.legend()
+plt.show()
+
+
+df['video_views'].describe()
+
+
+df['video_views'].max()
+
+
+df['video_views'].min()
+
+
+df['video_views'].mean()
+
+
+df['video_views'].median()
+
+
+df['country'].value_counts().idxmax()
+
+
+df[ df['uploads'] == df['uploads'].max()]
+
+
+df[ df['uploads'] == df['uploads'].min()]
