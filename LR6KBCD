@@ -1,0 +1,111 @@
+import numpy as np
+import matplotlib.pyplot as plt
+
+
+axiom = "F"
+rules = {
+    "F": "F+F-F-F+F"
+}
+iterations = 6
+angle = 70
+step = 1
+
+def generate_lsystem(axiom, rules, n):
+    result = axiom
+    for _ in range(n):
+        new_result = ""
+        for c in result:
+            new_result += rules.get(c, c)
+        result = new_result
+    return result
+
+lsystem_string = generate_lsystem(axiom, rules, iterations)
+
+x, y = [0], [0]
+current_angle = 0
+
+for command in lsystem_string:
+    if command == "F":
+        x.append(x[-1] + step * np.cos(np.radians(current_angle)))
+        y.append(y[-1] + step * np.sin(np.radians(current_angle)))
+    elif command == "+":
+        current_angle += angle
+    elif command == "-":
+        current_angle -= angle
+
+plt.figure(figsize=(10,5))
+plt.plot(x, y, color='gold', linewidth=2)
+plt.axis('equal')
+plt.axis('off')
+plt.title("Фрактальна квітка (з L-system)")
+plt.show()
+
+
+def koch_curve(p1, p2, depth):
+    if depth == 0:
+        return [p1, p2]
+
+    p1 = np.array(p1)
+    p2 = np.array(p2)
+
+    d = (p2 - p1) / 3
+    pA = p1 + d
+    pB = p1 + 2*d
+
+    angle = np.pi / 2
+    pC = pA + np.array([
+        d[0]*np.cos(angle) - d[1]*np.sin(angle),
+        d[0]*np.sin(angle) + d[1]*np.cos(angle)
+    ])
+
+    return (
+        koch_curve(p1, pA, depth-1)[:-1] +
+        koch_curve(pA, pC, depth-1)[:-1] +
+        koch_curve(pC, pB, depth-1)[:-1] +
+        koch_curve(pB, p2, depth-1)
+    )
+
+p1 = [0, 4]
+p2 = [1, 2]
+p3 = [0.2, np.sqrt(3)/2]
+
+points = (
+    koch_curve(p1, p2, 4)[:-1] +
+    koch_curve(p2, p3, 4)[:-1] +
+    koch_curve(p3, p1, 4)
+)
+
+x = [p[0] for p in points]
+y = [p[1] for p in points]
+
+
+plt.figure(figsize=(6,6))
+plt.plot(x, y)
+plt.title("Сніжинка Коха")
+plt.axis('equal')
+plt.show()
+
+
+def draw_tree(x, y, angle, depth, length):
+    if depth == 0:
+        return
+
+    x2 = x + length * np.cos(angle)
+    y2 = y + length * np.sin(angle)
+
+    if depth > 4:
+        color = 'brown'
+    else:
+        color = 'pink'
+
+    plt.plot([x, x2], [y, y2], color=color, linewidth=depth)
+
+    draw_tree(x2, y2, angle + np.pi/5, depth - 1, length * 0.8)
+    draw_tree(x2, y2, angle - np.pi/5, depth - 1, length * 0.8)
+
+plt.figure(figsize=(6,6))
+draw_tree(0, 0, np.pi/2, depth=10, length=0.5)
+
+plt.title("Фрактальне дерево")
+plt.axis('off')
+plt.show()
