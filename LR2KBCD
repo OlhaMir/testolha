@@ -1,0 +1,129 @@
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+
+
+from google.colab import files
+
+uploaded = files.upload()
+
+
+df = pd.read_csv('bestsellers.csv', encoding='latin1')
+df
+
+
+import kagglehub
+import os
+path = kagglehub.dataset_download("sootersaalu/amazon-top-50-bestselling-books-2009-2019")
+print("Path to dataset files:", path)
+
+
+df = pd.read_csv(os.path.join(path, "bestsellers with categories.csv"))
+df
+
+
+df.head()
+
+
+df.shape
+
+
+df.duplicated().sum()
+
+
+df.duplicated(subset='Name').sum()
+
+
+df = df.drop_duplicates (subset='Name')
+
+
+df.shape
+
+
+df.columns = ['name', 'author', 'user_rating', 'reviews', 'price', 'year', 'genre']
+df.head()
+
+
+df.info()
+
+
+df.isna().sum()
+
+
+df['genre'].value_counts()
+
+
+df['genre'].unique()
+
+
+df['price'].plot(kind='hist', label='Number of books')
+plt.xlabel('Price')
+plt.title('Number of books per price')
+plt.legend()
+plt.show()
+
+
+df['price'].describe()
+
+
+df['price'].max()
+
+
+df['price'].min()
+
+
+df['price'].mean()
+
+
+df['price'].median()
+
+
+df['user_rating'].max()
+
+
+df[df['user_rating'] == 4.9]['name'].count()
+
+
+df[ df['reviews'] == df['reviews'].max()]
+
+
+max_price = df [df['year'] == 2015] ['price'].max()
+df[(df['year'] == 2015) & (df['price'] == max_price)]
+
+
+df[(df['year'] == 2010) & (df['genre'] == 'Fiction')].count()['name']
+
+
+df[ (df['user_rating'] == 4.9) & ((df['year']==2010) | (df ['year'] == 2011))]
+
+
+df[(df['price'] <8) & (df['year'] == 2015)].sort_values('price')
+
+
+df.groupby(['genre']) [['price']].agg([np.min, np.max])
+
+
+author_books = df.groupby(['author']) [['name']].count()
+author_books
+
+
+author_books [author_books['name'] == author_books['name'].max()]
+
+
+avg_author_raing = df.groupby (['author']) [['user_rating']].agg(np.mean).round(1)
+avg_author_raing
+
+
+avg_author_raing[avg_author_raing['user_rating'] == avg_author_raing['user_rating'].min()]
+
+
+avg_author_raing.min()
+
+
+book_and_raiting = pd.concat([avg_author_raing, author_books], axis=1)
+book_and_raiting
+
+
+book_and_raiting.sort_values (by=['name', 'user_rating'])
+
+
