@@ -1,0 +1,62 @@
+import altair as alt
+from vega_datasets import data
+
+
+source = data.wheat()
+
+source
+
+
+bars = alt.Chart(source).mark_bar().encode(
+    x=alt.X('wheat:Q', title='Врожайність пшениці'),
+    y=alt.Y('year:O', title='Рік')
+)
+
+text = alt.Chart(source).mark_text(
+    align='left',
+    baseline='middle',
+    dx=3
+).encode(
+    x='wheat:Q',
+    y='year:O',
+    text=alt.Text('wheat:Q', format='.1f')
+)
+
+chart = (bars + text).properties(
+    title='Врожайність пшениці за роками'
+)
+
+chart
+
+
+source = data.iowa_electricity()
+
+source
+
+
+chart = alt.Chart(source).mark_bar(opacity=0.7).encode(
+    x=alt.X('year:T', title='Рік'),
+    y=alt.Y('net_generation:Q', title='Чисте виробництво електроенергії'),
+    color=alt.Color('source:N', title='Джерело енергії')
+)
+
+chart.properties(
+    title='Виробництво електроенергії в Айові за джерелами'
+)
+
+
+import plotly.express as px
+
+
+df = px.data.iris()
+
+fig = px.scatter(
+    df,
+    x="sepal_width",
+    y="sepal_length",
+    size="petal_length",
+    color="species",
+    hover_data=["petal_width"]
+)
+
+fig.show()
