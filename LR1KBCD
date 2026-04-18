@@ -1,0 +1,137 @@
+import numpy as np
+np.__version__
+
+
+v = np.array([1, 2, 3, 4, 5], dtype = float)
+v
+
+
+v[0]
+
+
+v[-1]
+
+
+a = np.array([[6, 1, 2],
+             [9, 5, 3]])
+a
+
+
+a[1, 2]
+
+
+a[0,0]
+
+
+a.dtype
+
+
+a.size
+
+
+a.shape
+
+
+a = np.array([[5, 9, 6], [1, 7, 4], [8, 3, 2]])
+a
+
+
+b = np.matrix([[5, 9, 6], [1, 7, 4], [8, 3, 2]])
+b
+
+
+diag_a = np.diag(a)
+diag_a
+
+
+a_diag = np.diag(diag_a)
+a_diag
+
+
+np.zeros (5)
+
+
+np.zeros((3, 3), dtype=int)
+
+
+np.random.randint(11, size=(4,4))
+
+
+np.ones (5)
+
+
+np.ones((3, 3), dtype=int)
+
+
+np.arange(2, 9, 2)
+
+
+np.linspace(0, 20, 5)
+
+
+a = np.array([[5, 1, 9], [2, 8, 7], [6, 3, 4]])
+a
+
+
+a.transpose()
+
+
+a.T
+
+
+a = np.array([[1, 4], [3, 2]])
+a
+
+
+a_det = np.linalg.det(a)
+a_det
+
+
+a = np.matrix([[3, 1, 6], [2, 5, 4]])
+c = 3 * a
+c
+
+
+a= np.matrix ([[2, 6, 3], [10, 1, 9]])
+b = np.matrix([[11, 4, 9], [5, 12, 8]])
+c = a + b
+c
+
+
+a = np.matrix([[2, 1], [4, 5]])
+b= np.matrix([[8, 3], [7, 2]])
+c = np.dot(a, b)
+c
+
+
+np.multiply(a, b)
+
+
+a/b
+
+
+np.divide(a, b)
+
+
+a = np.matrix ([[3, 5], [-4, 2]])
+
+a_inv = np.linalg.inv(a)
+a_inv
+
+
+rank = np.linalg.matrix_rank(a)
+rank
+
+
+a = np.array([[3, 2, -1],
+[4, -5, 0],
+[-4, 0, -2]])
+eigenvalues, eigenvectors = np.linalg.eig(a)
+
+
+print("Власні числа:")
+eigenvalues
+
+
+print("\nВласні вектори:")
+eigenvectors
