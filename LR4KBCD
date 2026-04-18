@@ -1,0 +1,196 @@
+from google.colab import files
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+
+uploaded = files.upload()
+
+
+df= pd.read_csv('Museum_Visitors (2).csv')
+df
+
+
+df.info()
+
+
+df.duplicated().sum()
+
+
+df.isnull().sum()
+
+
+df = df.fillna(df.mean(numeric_only=True), axis=0)
+
+
+df.isnull().sum()
+
+
+df.head()
+
+
+df.describe()
+
+
+df.columns = df.columns.str.lower().str.replace(' ', '_').str.replace('/', '_').str.replace('_', '_').str.strip()
+df.columns
+
+
+df.tail()
+
+
+df['month'] = pd.to_datetime(df['month'], format='%m/%d/%Y %I:%M:%S %p')
+df_2018 = df [df['month'].dt.year == 2018]
+min_visitors = df_2018.iloc[:, 1:].min()
+max_visitors = df_2018.iloc[:, 1:].max()
+result = pd.DataFrame({'min': min_visitors, 'max': max_visitors})
+
+result
+
+
+average_visitors = df.iloc[:, 1:].mean()
+average_visitors
+
+
+df_2015 = df.loc[df['month'].dt.year == 2015].copy()
+
+df_2015['total_visitors'] = df_2015.iloc[:, 1:].sum(axis=1)
+
+min_row = df_2015.loc[df_2015['total_visitors'].idxmin()]
+max_row = df_2015.loc[df_2015['total_visitors'].idxmax()]
+
+min_month = min_row['month'].strftime('%B')
+max_month = max_row['month'].strftime('%B')
+
+print(f'Найнижча відвідуваність у {min_month}')
+print(f'Найвища відвідуваність у {max_month}')
+
+
+df_2015.head()
+
+
+df_2018 = df[df['month'].dt.year == 2018].copy()
+
+df_2018['month_num'] = df_2018['month'].dt.month
+
+summer = df_2018[df_2018['month_num'].isin ([6, 7, 8])] ['avila_adobe'].sum()
+
+winter = df_2018[df_2018['month_num'].isin ([1, 2, 12])] ['avila_adobe'].sum()
+
+print(f" Літом відвідали: {summer} людей")
+print(f" Зимою відвідали: {winter} людей")
+
+
+mtx = df.corr (numeric_only=True).abs()
+
+fig, ax = plt.subplots (figsize=(8, 8))
+sns.heatmap(
+mtx,
+cmap='crest',
+annot=True,
+fmt=".2f",
+linewidths=0.5,
+mask=np.triu(np.ones_like (mtx, dtype=bool)),
+square=True,
+cbar=False,
+ax=ax
+)
+plt.title("Матриця попарної кореляції ознак", fontsize=14)
+plt.tight_layout()
+plt.show()
+
+
+sns.set_theme(style="darkgrid")
+
+plt.figure(figsize=(10, 5))
+sns.lineplot(data=df, x='month', y='avila_adobe', marker='o')
+
+plt.xticks(rotation=45)
+plt.xlabel('Місяць')
+plt.ylabel('Кількість відвідувачів')
+plt.title('Avila Adobe: Відвідуваність з часом')
+
+plt.tight_layout()
+plt.show()
+
+
+df['year'] = df['month'].dt.year
+sns.boxplot(data=df, x='year', y='chinese_american_museum')
+plt.title('Chinese American Museum: Розподіл по роках')
+plt.show()
+
+
+sns.histplot(df ['gateway_to_nature_center'], bins=30, kde=True)
+plt.title('Розподіл відвідуваності Gateway to Nature Center')
+plt.show()
+
+
+avg_visitors = df.drop(columns=['month', 'year']).mean().sort_values (ascending=False)
+sns.barplot(x=avg_visitors.values, y=avg_visitors.index)
+plt.title('Cередня кількість відвідувачів по музеях')
+plt.xlabel('Середнє значення')
+plt.ylabel('Музей')
+plt.show()
+
+
+uploaded = files.upload()
+
+
+df= pd.read_csv('penguins.csv')
+df
+
+
+df.info()
+
+
+sns.set_theme(style="darkgrid")
+
+sns.histplot(data=df, x="body_mass_g", bins=20, kde=True, color="green")
+plt.title("Розподіл маси тіла пінгвінів")
+plt.show()
+
+
+sns.scatterplot(
+    data=df,
+    x="bill_length_mm",
+    y="bill_depth_mm",
+    hue="species",
+    palette="icefire"
+)
+plt.title("Довжина vs глибина дзьоба")
+plt.show()
+
+
+sns.barplot(
+    data=df,
+    x="species",
+    y="body_mass_g",
+    hue="species",
+    palette="plasma"
+)
+plt.title("Середня маса тіла за видами")
+plt.show()
+
+
+sns.boxplot(
+    data=df,
+    x="island",
+    y="flipper_length_mm",
+    hue="species",
+    palette="coolwarm"
+)
+plt.title("Довжина ласт по островах")
+plt.show()
+
+
+sns.scatterplot(
+    data=df,
+    x="year",
+    y="body_mass_g",
+    hue="sex",
+    style="sex",
+    palette="muted"
+)
+plt.title("Маса тіла за роками та статтю")
+plt.show()
