@@ -1,0 +1,139 @@
+from google.colab import files
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+
+uploaded = files.upload()
+
+
+df= pd.read_csv('shopping_trends.csv')
+df
+
+
+df.columns = df.columns.str.lower().str.replace(' ', '_').str.replace('/', '_').str.replace('_', '_').str.strip()
+df.columns
+
+
+df.head()
+
+
+df.tail()
+
+
+df.shape
+
+
+df.info()
+
+
+df.duplicated().sum()
+
+
+df.isnull().sum()
+
+
+sns.set_theme(style="darkgrid")
+
+plt.figure(figsize=(8, 5))
+sns.histplot(data=df, x='age', bins=10, kde=True, color='red')
+
+plt.title('Розподіл віку клієнтів')
+plt.xlabel('Вік')
+plt.ylabel('Кількість клієнтів')
+
+plt.show()
+
+
+sns.set_theme(style="darkgrid")
+
+plt.figure(figsize=(12, 6))
+sns.countplot(data=df, x='item_purchased', hue='gender')
+
+plt.title('Розподіл покупок за статтю')
+plt.xlabel('Товар')
+plt.ylabel('Кількість покупок')
+plt.xticks(rotation=45)
+
+plt.legend(title='Стать')
+plt.show()
+
+
+top_items = df['item_purchased'].value_counts().reset_index()
+top_items.columns = ['item_purchased', 'count']
+
+plt.figure(figsize=(12, 6))
+sns.barplot(data=top_items, x='item_purchased', y='count')
+
+plt.title('Частота покупок товарів')
+plt.xlabel('Товар')
+plt.ylabel('Кількість покупок')
+plt.xticks(rotation=45)
+
+plt.show()
+
+
+sns.set_theme(style="darkgrid")
+
+age_avg = df.groupby('age')['purchase_amount_(usd)'].mean().reset_index()
+
+plt.figure(figsize=(10, 5))
+sns.lineplot(data=age_avg, x='age', y='purchase_amount_(usd)')
+
+plt.title('Середні витрати залежно від віку')
+plt.xlabel('Вік')
+plt.ylabel('Середня сума покупок')
+
+plt.show()
+
+
+sns.set_theme(style="darkgrid")
+
+plt.figure(figsize=(8, 5))
+sns.scatterplot(data=df, x='age', y='purchase_amount_(usd)')
+
+plt.title('Залежність між віком та сумою покупок')
+plt.xlabel('Вік')
+plt.ylabel('Сума покупок')
+
+plt.show()
+
+
+plt.figure(figsize=(8, 5))
+sns.kdeplot(data=df, x='review_rating', fill=True)
+
+plt.title('Щільність розподілу оцінок')
+plt.xlabel('Оцінка')
+plt.ylabel('Щільність')
+
+plt.show()
+
+
+sns.set_theme(style="darkgrid")
+
+plt.figure(figsize=(6, 5))
+sns.countplot(data=df, x='gender')
+
+plt.title('Розподіл покупок за статтю')
+plt.xlabel('Стать')
+plt.ylabel('Кількість покупок')
+
+plt.show()
+
+
+sns.set_theme(style="darkgrid")
+
+plt.figure(figsize=(8, 5))
+sns.barplot(
+    data=df,
+    x='review_rating',
+    y='purchase_amount_(usd)',
+    palette='plasma'
+)
+
+plt.title('Середня сума покупок залежно від рейтингу')
+plt.xlabel('Рейтинг')
+plt.ylabel('Сума покупок')
+
+plt.show()
