@@ -1,0 +1,109 @@
+import altair as alt
+from vega_datasets import data
+
+
+source = data.seattle_weather()
+
+source
+
+
+chart1 = alt.Chart(source).mark_bar(
+    cornerRadiusTopLeft=10,
+    cornerRadiusTopRight=10
+).encode(
+    x=alt.X('weather:N', sort='-y'),
+    y='count():Q',
+    color='weather:N'
+).properties (
+    title="Кількість днів кожного типу погоди"
+)
+
+chart1
+
+
+source = data.barley()
+
+source
+
+
+source = data.barley()
+
+chart2 = alt.Chart (source).transform_filter(
+    alt.datum.year == 1931
+).mark_bar().encode(
+    x='yield:Q',
+    y=alt.Y('variety:N', sort='-x'),
+    color='site:N'
+).properties(
+    title="Врожайність ячменю у 1931 році по сортах"
+)
+
+chart2
+
+
+source = data.seattle_weather()
+
+chart3 = alt.Chart(source).mark_bar().encode(
+    x=alt.X('month(date):O', title='Місяць'),
+    y='count():Q',
+    color='weather:N',
+    column='weather:N'
+).properties(
+    title="Кількість днів кожного типу погоди по місяцях"
+)
+
+chart3
+
+
+source = data.stocks()
+
+filtered = source[source['symbol'].isin(['GOOG', 'AAPL'])]
+
+chart4 = alt.Chart (filtered).mark_area(
+    line=True,
+    color=alt.Gradient(
+        gradient='linear',
+        stops=[
+            alt.GradientStop(color='white', offset=0),
+            alt.GradientStop(color='steelblue', offset=1)
+        ],
+        x1=1, x2=1, y1=1, y2=0
+    )
+).encode(
+    x='date:T',
+    y='price:Q',
+    color='symbol:N'
+).properties (
+    title="Ціни акцій GOOG 1 AAPL з градієнтом"
+)
+
+chart4
+
+
+source = data.unemployment_across_industries.url
+
+chart5 = alt.Chart (source).mark_area().encode(
+    x=alt.X('yearmonth(date):T', axis=alt.Axis(format='%Y')),
+    y=alt.Y('sum(count):Q', stack='center', axis=None),
+    color=alt.Color('series:N', scale=alt.Scale (scheme='category20b'))
+).interactive().properties (
+    width=1000,
+    height=300,
+    title="Рівень безробіття в США по галузях"
+)
+
+chart5
+
+
+source = data.seattle_weather()
+
+weather_counts = source.groupby ('weather').size().reset_index(name='count')
+
+chart6 = alt.Chart(weather_counts).mark_arc(innerRadius=50).encode(
+    theta='count:Q',
+    color='weather:N'
+).properties (
+    title="Типи погоди у Сіетлі кільцева діаграма"
+)
+
+chart6
